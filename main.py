@@ -18,15 +18,24 @@ def main():
     print("====================================================")
     
     import sys
-    # Prompt the user for a ticker symbol, defaulting to FPT
-    if sys.stdin.isatty():
+    ticker = ""
+
+    # 1. Check command-line arguments (e.g. python main.py HPG)
+    if len(sys.argv) > 1:
+        ticker = sys.argv[1].strip().upper()
+
+    # 2. Check environment variable
+    if not ticker:
+        ticker = os.environ.get("DEFAULT_TICKER", "").strip().upper()
+
+    # 3. Check interactive input if in a terminal
+    if not ticker and sys.stdin.isatty():
         try:
-            ticker = input("Enter the stock ticker symbol to schedule daily (e.g., FPT): ").strip().upper()
+            ticker = input("Nhập mã cổ phiếu muốn theo dõi hàng ngày (mặc định: FPT): ").strip().upper()
         except (EOFError, KeyboardInterrupt):
-            ticker = "FPT"
-    else:
-        ticker = "FPT"
-        
+            pass
+
+    # 4. Fallback to default
     if not ticker:
         ticker = "FPT"
         
