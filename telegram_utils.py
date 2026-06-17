@@ -9,7 +9,7 @@ def send_telegram_report(message: str, ticker: str = "", chat_id: str = None):
         chat_id = os.environ.get("TELEGRAM_CHAT_ID")
         
     if not bot_token or not chat_id:
-        print("⚠️ Telegram not configured (missing TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID)")
+        print("Telegram not configured (missing TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID)")
         return
         
     # Translate markdown bold/italic to HTML
@@ -36,9 +36,9 @@ def send_telegram_report(message: str, ticker: str = "", chat_id: str = None):
     try:
         resp = requests.post(url, json=payload, timeout=15)
         if resp.status_code == 200:
-            print(f"✅ Report sent to Telegram chat {chat_id} successfully!")
+            print(f"Report sent to Telegram chat {chat_id} successfully!")
         else:
-            print(f"⚠️ HTML formatting failed ({resp.json().get('description', '')}), attempting plain text...")
+            print(f"HTML formatting failed ({resp.json().get('description', '')}), attempting plain text...")
             # Fallback to plain text
             plain = re.sub(r'<[^>]+>', '', text)
             payload_plain = {
@@ -47,11 +47,11 @@ def send_telegram_report(message: str, ticker: str = "", chat_id: str = None):
             }
             resp2 = requests.post(url, json=payload_plain, timeout=15)
             if resp2.status_code == 200:
-                print(f"✅ Plain text fallback report sent to Telegram chat {chat_id} successfully!")
+                print(f"Plain text fallback report sent to Telegram chat {chat_id} successfully!")
             else:
-                print(f"❌ Telegram API send failed: {resp2.text}")
+                print(f"Telegram API send failed: {resp2.text}")
     except Exception as e:
-        print(f"❌ Exception sending telegram message: {e}")
+        print(f"Exception sending telegram message: {e}")
 
 def send_telegram_photo(photo_path: str, caption: str = "", chat_id: str = None):
     """Send a photo to Telegram, with a fallback to text report if it fails."""
@@ -60,7 +60,7 @@ def send_telegram_photo(photo_path: str, caption: str = "", chat_id: str = None)
         chat_id = os.environ.get("TELEGRAM_CHAT_ID")
         
     if not bot_token or not chat_id:
-        print("⚠️ Telegram not configured (missing TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID)")
+        print("Telegram not configured (missing TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID)")
         return
         
     url = f"https://api.telegram.org/bot{bot_token}/sendPhoto"
@@ -74,7 +74,7 @@ def send_telegram_photo(photo_path: str, caption: str = "", chat_id: str = None)
         ticker_match = re.search(r'BÁO CÁO CHỨNG KHOÁN - ([A-Z0-9]+)', caption)
         ticker = ticker_match.group(1) if ticker_match else ""
         ticker_label = f" - {ticker}" if ticker else ""
-        short_caption = f"📈 <b>Biểu đồ kỹ thuật phân tích{ticker_label}</b>"
+        short_caption = f"<b>Biểu đồ kỹ thuật phân tích{ticker_label}</b>"
     else:
         # Translate markdown styles for caption
         short_caption = re.sub(r'\*\*(.+?)\*\*', r'<b>\1</b>', caption, flags=re.DOTALL)
@@ -95,14 +95,14 @@ def send_telegram_photo(photo_path: str, caption: str = "", chat_id: str = None)
             resp = requests.post(url, data=payload, files=files, timeout=30)
             
         if resp.status_code == 200:
-            print(f"✅ Chart photo sent to Telegram chat {chat_id} successfully!")
+            print(f"Chart photo sent to Telegram chat {chat_id} successfully!")
             if send_separately:
                 # Send the full report message as a follow-up text message
                 send_telegram_report(caption, chat_id=chat_id)
         else:
-            print(f"⚠️ Telegram photo send failed ({resp.json().get('description', '')}), falling back to text-only...")
+            print(f"Telegram photo send failed ({resp.json().get('description', '')}), falling back to text-only...")
             send_telegram_report(caption, chat_id=chat_id)
             
     except Exception as e:
-        print(f"❌ Exception sending telegram photo: {e}, falling back to text-only...")
+        print(f"Exception sending telegram photo: {e}, falling back to text-only...")
         send_telegram_report(caption, chat_id=chat_id)
