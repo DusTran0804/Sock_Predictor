@@ -71,6 +71,29 @@ chmod +x run.sh
 
 Khi khởi chạy, chương trình sẽ hỏi bạn mã cổ phiếu muốn theo dõi mặc định (ví dụ: `FPT`, `HPG`, `VNM`,...).
 
+### Cách 3: Sử dụng Docker & Docker Compose (Khuyên dùng khi triển khai)
+
+Dự án đã được đóng gói sẵn để chạy trong Docker Container, tự động kết nối với dịch vụ Ollama chạy trên máy host.
+
+1. **Khởi chạy hệ thống**:
+   ```bash
+   docker-compose up --build -d
+   ```
+
+2. **Cấu hình kết nối Ollama**:
+   Mặc định, biến môi trường `OLLAMA_BASE_URL` trong [docker-compose.yml](file:///Users/tranduz/Documents/Stock_Prediction/docker-compose.yml) được cấu hình là `http://host.docker.internal:11434` để kết nối trực tiếp tới Ollama chạy trên máy host của bạn (đối với Windows và macOS).
+   Nếu bạn sử dụng Linux, hãy đảm bảo Ollama được khởi chạy với biến cấu hình để chấp nhận kết nối ngoài: `OLLAMA_HOST=0.0.0.0` và cập nhật URL nếu cần.
+
+3. **Kiểm tra logs của ứng dụng**:
+   ```bash
+   docker-compose logs -f app
+   ```
+
+4. **Dừng hệ thống**:
+   ```bash
+   docker-compose down
+   ```
+
 ---
 
 ## 📁 Cấu trúc thư mục dự án

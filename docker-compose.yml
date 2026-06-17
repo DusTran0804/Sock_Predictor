@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: stock_prediction_app
+    restart: unless-stopped
+    volumes:
+      - ./vectordb:/app/vectordb
+      - ./.env:/app/.env
+    environment:
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  # Optional: Uncomment the lines below if you want to run Ollama inside docker-compose.
+  # Note that running Ollama inside Docker requires GPU acceleration configured if you want decent speed.
+  #
+  # ollama:
+  #   image: ollama/ollama:latest
+  #   container_name: ollama
+  #   ports:
+  #     - "11434:11434"
+  #   volumes:
+  #     - ollama_data:/root/.ollama
+  #   restart: unless-stopped
+  #
+  # volumes:
+  #   ollama_data:

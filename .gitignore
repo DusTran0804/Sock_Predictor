@@ -1,0 +1,24 @@
+# Virtual environment
+venv/
+
+# Vector database
+vectordb/
+
+# Local configuration / secrets
+.env
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# macOS files
+.DS_Store
+
+# Temporary charts / reports
+chart_*.png
+chart_vtp.png
+
+# Log files
+*.log

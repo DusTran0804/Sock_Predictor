@@ -1,0 +1,13 @@
+crewai
+yfinance
+python-dotenv
+requests
+pandas
+matplotlib
+mplfinance
+schedule
+pytz
+vnstock
+python-telegram-bot
+openai
+lancedb
