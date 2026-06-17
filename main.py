@@ -31,14 +31,10 @@ def main():
     # 3. Check interactive input if in a terminal
     if not ticker and sys.stdin.isatty():
         try:
-            ticker = input("Nhập mã cổ phiếu muốn theo dõi hàng ngày (mặc định: FPT): ").strip().upper()
+            ticker = input("Nhập mã cổ phiếu muốn theo dõi hàng ngày: ").strip().upper()
         except (EOFError, KeyboardInterrupt):
             pass
 
-    # 4. Fallback to default
-    if not ticker:
-        ticker = "FPT"
-        
     print(f"System configured for daily reports at 07:00 AM (Vietnam Time) for ticker: {ticker}")
     print("Starting Telegram chatbot and scheduler threads...")
 
